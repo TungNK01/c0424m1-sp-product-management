@@ -31,4 +31,12 @@ public class ProductController {
         modelAndView.addObject("product", new Product());
         return modelAndView;
     }
+
+    @GetMapping("")
+    public ModelAndView listProducts() {
+        Iterable<Product> products = productService.findAll();
+        ModelAndView modelAndView = new ModelAndView("/product/list");
+        modelAndView.addObject("products", products);
+        return modelAndView;
+    }
 }
