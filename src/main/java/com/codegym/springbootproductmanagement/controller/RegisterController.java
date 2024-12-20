@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Controller
-@RequestMapping("/dangky")
+@RequestMapping("/register")
 public class RegisterController {
 
     @Autowired
@@ -43,7 +43,7 @@ public class RegisterController {
     @GetMapping
     public String register(Model model){
         model.addAttribute("user", new AppUser());
-        return "dangky";
+        return "register";
     }
 
     @PostMapping

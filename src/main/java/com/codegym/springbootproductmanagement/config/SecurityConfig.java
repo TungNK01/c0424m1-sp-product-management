@@ -7,6 +7,7 @@ import com.codegym.springbootproductmanagement.service.IAppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -22,6 +23,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableSpringDataWebSupport
 public class SecurityConfig {
 
     @Autowired
@@ -57,29 +59,29 @@ public class SecurityConfig {
     //    phan quyen
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        /*http.csrf(AbstractHttpConfigurer::disable)
+        http.csrf(AbstractHttpConfigurer::disable)
                 .formLogin(Customizer.withDefaults())
 
                 .authorizeHttpRequests(author -> author
-                        .anyRequest().permitAll())      ;*/
+                        .anyRequest().permitAll())      ;
 
-        http
-                .formLogin(formLogin -> formLogin.successHandler(customSuccessHandle())
-                )
-                .formLogin(Customizer.withDefaults())
-                .authorizeHttpRequests(author -> author
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/register").permitAll()
-                        .requestMatchers("/user**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-                        .requestMatchers("/admin**").hasRole("ADMIN")
-                        .requestMatchers("/products**", "/products/**").hasRole("USER")
-                        .requestMatchers("/shoppingcart/**", "/shoppingcart/ordernow/**", "/shoppingcart/delete/**").hasRole("USER")
-
-                        .anyRequest().denyAll()
-                )
-                .exceptionHandling(customizer -> customizer.accessDeniedHandler(customAccessDeniedHandler()))
-                .csrf(AbstractHttpConfigurer::disable);
+//        http
+//                .formLogin(formLogin -> formLogin.successHandler(customSuccessHandle())
+//                )
+//                .formLogin(Customizer.withDefaults())
+//                .authorizeHttpRequests(author -> author
+//                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+//                        .requestMatchers(HttpMethod.POST, "/register").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/register").permitAll()
+//                        .requestMatchers("/user**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+//                        .requestMatchers("/admin**").hasRole("ADMIN")
+//                        .requestMatchers("/products**", "/products/**").hasRole("USER")
+//                        .requestMatchers("/shoppingcart/**", "/shoppingcart/ordernow/**", "/shoppingcart/delete/**").hasRole("USER")
+//
+//                        .anyRequest().denyAll()
+//                )
+//                .exceptionHandling(customizer -> customizer.accessDeniedHandler(customAccessDeniedHandler()))
+//                .csrf(AbstractHttpConfigurer::disable);
         return http.build();
 
     }

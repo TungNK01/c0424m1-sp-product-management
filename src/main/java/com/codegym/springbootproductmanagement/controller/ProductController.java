@@ -3,12 +3,14 @@ package com.codegym.springbootproductmanagement.controller;
 import com.codegym.springbootproductmanagement.model.Product;
 import com.codegym.springbootproductmanagement.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/products")
@@ -33,10 +35,19 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public ModelAndView listProducts() {
-        Iterable<Product> products = productService.findAll();
-        ModelAndView modelAndView = new ModelAndView("/product/list");
-        modelAndView.addObject("products", products);
+    public ModelAndView listProducts(@RequestParam("search") Optional<String> search, @PageableDefault(value = 2) Pageable pageable) {
+        Page<Product> products;
+        ModelAndView modelAndView;
+        if (search.isPresent()) {
+            products = productService.findAllByNameContaining(pageable, search.get());
+            modelAndView = new ModelAndView("/product/list");
+            modelAndView.addObject("products", products);
+            modelAndView.addObject("search", search.get());
+        } else {
+            products = productService.findAll(pageable);
+            modelAndView = new ModelAndView("/product/list");
+            modelAndView.addObject("products", products);
+        }
         return modelAndView;
     }
 }
